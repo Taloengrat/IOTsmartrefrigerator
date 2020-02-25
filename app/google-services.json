@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "546719503991",
+    "firebase_url": "https://exam1-c6fd1.firebaseio.com",
+    "project_id": "exam1-c6fd1",
+    "storage_bucket": "exam1-c6fd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546719503991:android:97f95ef1d7a04aa525d872",
+        "android_client_info": {
+          "package_name": "com.example.iotsmartrefrigerator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546719503991-ahm0098dim2qffr00ekiicptjmkueeob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iotsmartrefrigerator",
+            "certificate_hash": "bdbab3f7d61fbdbd80367e3aa1fa0e54b85091f4"
+          }
+        },
+        {
+          "client_id": "546719503991-mrekaagkg8h4d05elaolledat9ak5qej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQQRbtZK9uWhkFni_RkCUMquxGSrEbZ0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546719503991-mrekaagkg8h4d05elaolledat9ak5qej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

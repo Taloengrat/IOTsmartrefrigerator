@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#BCAAA4">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/framegg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="16dp">
+
+        <ImageView
+            android:id="@+id/hole1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineVer"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="@+id/guidelineHo"
+            app:layout_constraintWidth_percent="0.3"
+
+            app:srcCompat="@drawable/hole" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/hole2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVer"
+            app:layout_constraintTop_toTopOf="@+id/guidelineHo"
+            app:layout_constraintWidth_percent="0.3"
+            app:srcCompat="@drawable/hole" />
+
+        <ImageView
+            android:id="@+id/hole3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineVer"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hole1"
+            app:layout_constraintWidth_percent="0.3"
+            app:srcCompat="@drawable/hole" />
+
+        <ImageView
+            android:id="@+id/hole4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVer"
+            app:layout_constraintTop_toBottomOf="@+id/hole2"
+            app:layout_constraintWidth_percent="0.3"
+            app:srcCompat="@drawable/hole" />
+
+        <ImageView
+            android:id="@+id/hole5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineVer"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hole3"
+            app:layout_constraintWidth_percent="0.3"
+            app:srcCompat="@drawable/hole" />
+
+        <ImageView
+            android:id="@+id/hole6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVer"
+            app:layout_constraintTop_toBottomOf="@+id/hole4"
+            app:layout_constraintWidth_percent="0.3"
+            app:srcCompat="@drawable/hole" />
+
+
+        <ImageView
+            android:id="@+id/tank"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/frametank"
+            android:padding="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineHo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.7"
+            app:srcCompat="@drawable/fullwater" />
+
+        <ImageView
+            android:id="@+id/egg1"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            tools:layout_editor_absoluteX="27dp"
+            tools:layout_editor_absoluteY="182dp"
+            app:layout_constraintCircle="@id/hole1"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/egg2"
+            android:layout_width="wrap_content"
+            app:layout_constraintCircleRadius="30dp"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircle="@id/hole2"
+            tools:layout_editor_absoluteX="208dp"
+            tools:layout_editor_absoluteY="201dp"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/egg3"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole3"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="338dp"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/egg4"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole4"
+            tools:layout_editor_absoluteX="216dp"
+            tools:layout_editor_absoluteY="344dp"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/egg5"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole5"
+            tools:layout_editor_absoluteX="26dp"
+            tools:layout_editor_absoluteY="477dp"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/egg6"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole6"
+            tools:layout_editor_absoluteX="219dp"
+            tools:layout_editor_absoluteY="489dp"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/tank"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tank"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/refresh"
+            tools:ignore="VectorDrawableCompat" />
+
+        <ImageView
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/refresh"
+            app:layout_constraintEnd_toStartOf="@+id/refresh"
+            app:layout_constraintTop_toTopOf="@+id/refresh"
+            app:srcCompat="@drawable/location"
+            tools:ignore="VectorDrawableCompat" />
+
+        <Switch
+            android:id="@+id/aswitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="#ffff"
+            android:text="Light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:fontFamily="@font/thin"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="#ffff"
+            app:layout_constraintEnd_toEndOf="@+id/tank"
+            app:layout_constraintTop_toTopOf="@+id/tank" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
