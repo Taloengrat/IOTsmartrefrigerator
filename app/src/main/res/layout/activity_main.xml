@@ -133,7 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintWidth_percent="0.7"
             app:srcCompat="@drawable/fullwater" />
 
@@ -218,16 +218,6 @@
             app:srcCompat="@drawable/refresh"
             tools:ignore="VectorDrawableCompat" />
 
-        <ImageView
-            android:id="@+id/map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/refresh"
-            app:layout_constraintEnd_toStartOf="@+id/refresh"
-            app:layout_constraintTop_toTopOf="@+id/refresh"
-            app:srcCompat="@drawable/location"
-            tools:ignore="VectorDrawableCompat" />
-
         <Switch
             android:id="@+id/aswitch"
             android:layout_width="wrap_content"
@@ -252,6 +242,29 @@
             android:textColor="#ffff"
             app:layout_constraintEnd_toEndOf="@+id/tank"
             app:layout_constraintTop_toTopOf="@+id/tank" />
+
+        <TextView
+            android:id="@+id/txName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="TextView"
+            android:fontFamily="@font/bold"
+            android:textSize="30dp"
+            android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txName"
+            app:layout_constraintEnd_toStartOf="@+id/txName"
+            app:layout_constraintTop_toTopOf="@+id/txName"
+            app:srcCompat="@drawable/ui" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,8 +39,8 @@ import static com.example.iotsmartrefrigerator.MyBroadcastReceiver.EXTRA_NOTIFIC
 
 public class MainActivity extends AppCompatActivity {
     
-    ImageView egg1, egg2 ,egg3 ,egg4 ,egg5 ,egg6, water,refresh, map;
-    TextView txWater;
+    ImageView egg1, egg2 ,egg3 ,egg4 ,egg5 ,egg6, water,refresh;
+    TextView txWater,txName;
     Switch aSwitch;
     boolean stateSwith = false;
     public MediaPlayer sd, buttonsd;
@@ -65,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
         buttonsd = MediaPlayer.create(getApplicationContext(), R.raw.button);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef1 = database.getReference("egg0");
-        DatabaseReference myRef2 = database.getReference("egg1");
-        DatabaseReference myRef3 = database.getReference("egg2");
-        DatabaseReference myRef4 = database.getReference("egg3");
-        DatabaseReference myRef5 = database.getReference("egg4");
-        DatabaseReference myRef6 = database.getReference("egg5");
-        final DatabaseReference waters = database.getReference("ml");
+        DatabaseReference myRef1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg0");
+        DatabaseReference myRef2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg1");
+        DatabaseReference myRef3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg2");
+        DatabaseReference myRef4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg3");
+        DatabaseReference myRef5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg4");
+        DatabaseReference myRef6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg5");
+        final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/ml");
 
 
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
              buttonsd.start();
              FirebaseDatabase database = FirebaseDatabase.getInstance();
-             DatabaseReference myRef = database.getReference("device/led_control");
+             DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control");
 
 
              if (stateSwith){
@@ -132,22 +134,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                }
-            }
-        });
+//        map.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                if (mapIntent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+//                    startActivity(mapIntent);
+//                }
+//            }
+//        });
 
 
     }
 
     private void BindingData() {
+        txName = findViewById(R.id.txName);
         egg1 = findViewById(R.id.egg1);
         egg2 = findViewById(R.id.egg2);
         egg3 = findViewById(R.id.egg3);
@@ -156,9 +159,11 @@ public class MainActivity extends AppCompatActivity {
         egg6 = findViewById(R.id.egg6);
         water = findViewById(R.id.tank);
         refresh = findViewById(R.id.refresh);
-        map = findViewById(R.id.map);
+
         txWater = findViewById(R.id.txWater);
         aSwitch = findViewById(R.id.aswitch);
+
+        txName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
     }
 
@@ -292,15 +297,20 @@ buttonsd.start();
     protected void onStart() {
         super.onStart();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference getLight = database.getReference("device/led_control");
+        DatabaseReference getLight = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control");
 
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(1);
         getLight.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Long led_control = dataSnapshot.getValue(Long.class);
+                int led_control = dataSnapshot.getValue(Integer.class);
 
                 if (led_control==1){
                     aSwitch.setChecked(true);
+                    Handler pd = new Handler();
+                    pd.postDelayed(close_led, 10000);
+
+
                 }else if (led_control == 0)
                 {
                     aSwitch.setChecked(false);
@@ -403,4 +413,24 @@ buttonsd.start();
         }
     }
 
+    Runnable close_led = new Runnable() {
+        @Override
+        public void run() {
+
+            FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(0);
+
+            aSwitch.setChecked(false);
+
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(0);
+
+
+    }
 }
