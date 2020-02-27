@@ -61,6 +61,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -336,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                 sd.start();
 
 
-                content = "ไข่หมด";
+                content = "ไข่ถาดที่ 1 หมด";
                 LongOperation lo = new LongOperation(MainActivity.this);
                 lo.execute("IOTsmartRefrigerator");
 
@@ -345,6 +347,10 @@ public class MainActivity extends AppCompatActivity {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.notification);
                 dialog.setCancelable(false);
+
+                TextView content = dialog.findViewById(R.id.textContent);
+
+                content.setText("ไข่ถาดที่ 1 หมด");
 
                 Button btOk = dialog.findViewById(R.id.ok);
 
@@ -415,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 sd.start();
 
 
-                content = "ไข่หมด";
+                content = "ไข่ถาดที่ 2 หมด";
                 LongOperation lo = new LongOperation(MainActivity.this);
                 lo.execute("IOTsmartRefrigerator");
 
@@ -426,6 +432,10 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setCancelable(false);
 
                 Button btOk = dialog.findViewById(R.id.ok);
+
+                TextView content = dialog.findViewById(R.id.textContent);
+
+                content.setText("ไข่ถาดที่ 2 หมด");
 
                 btOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -471,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setCancelable(false);
 
                 Button btOk = dialog.findViewById(R.id.ok);
-                TextView tx = dialog.findViewById(R.id.textView2);
+                TextView tx = dialog.findViewById(R.id.textContent);
 
                 tx.setText("น้ำหมด");
                 btOk.setOnClickListener(new View.OnClickListener() {
