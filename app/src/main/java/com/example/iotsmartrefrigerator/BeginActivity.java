@@ -161,11 +161,11 @@ public class BeginActivity extends AppCompatActivity {
 
 
             for (int i = 0;i<6;i++) {
-                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path1"+"/" + "egg" + i).setValue(980);
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg1_" + i).setValue(980);
             }
 
             for (int i = 0;i<6;i++) {
-                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path2"+"/" + "egg" + i).setValue(980);
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg2_" + i).setValue(980);
             }
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/ml").setValue(600);
 

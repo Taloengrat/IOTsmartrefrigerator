@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
     // boolean flag to toggle the ui
     Boolean mRequestingLocationUpdates;
-    DatabaseReference myRef1, myRef2, myRef3, myRef4, myRef5, myRef6;
+    DatabaseReference myRef1_1, myRef1_2, myRef1_3, myRef1_4, myRef1_5, myRef1_6;
+    DatabaseReference myRef2_1, myRef2_2, myRef2_3, myRef2_4, myRef2_5, myRef2_6;
 
 
     @Override
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         BindingData();
 
 
+
         createNotificationChannel();
 
 
@@ -128,10 +130,12 @@ public class MainActivity extends AppCompatActivity {
 
          database = FirebaseDatabase.getInstance();
 
+        bindRefDatabase1();
+
         final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/ml");
 
 
-        bindRefDatabase();
+
 
         waters.addValueEventListener(eventListenerwater);
 
@@ -174,22 +178,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void bindRefDatabase1() {
+        myRef1_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_0");
+        myRef1_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_1");
+        myRef1_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_2");
+        myRef1_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_3");
+        myRef1_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_4");
+        myRef1_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_5");
 
-    private void bindRefDatabase() {
-        myRef1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg0");
-        myRef2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg1");
-        myRef3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg2");
-        myRef4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg3");
-        myRef5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg4");
-        myRef6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg5");
+        myRef2_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_0");
+        myRef2_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_1");
+        myRef2_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_2");
+        myRef2_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_3");
+        myRef2_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_4");
+        myRef2_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_5");
 
-        myRef1.addValueEventListener(eventListenerEgg);
-        myRef2.addValueEventListener(eventListenerEgg);
-        myRef3.addValueEventListener(eventListenerEgg);
-        myRef4.addValueEventListener(eventListenerEgg);
-        myRef5.addValueEventListener(eventListenerEgg);
-        myRef6.addValueEventListener(eventListenerEgg);
+
+
+
+
     }
+
 
     private void bindMenuSpinner() {
         String[] items = new String[]{"ถาดไข่ที่ 1", "ถาดไข่ที่ 2"};
@@ -231,20 +240,48 @@ public class MainActivity extends AppCompatActivity {
             switch (pos) {
                 case 0:
                     Toast.makeText(getApplicationContext(), "ถาดที่ 1", Toast.LENGTH_LONG).show();
-                    currentPath = 1;
+
+                    myRef1_1.addValueEventListener(eventListenerEgg1);
+                    myRef1_2.addValueEventListener(eventListenerEgg1);
+                    myRef1_3.addValueEventListener(eventListenerEgg1);
+                    myRef1_4.addValueEventListener(eventListenerEgg1);
+                    myRef1_5.addValueEventListener(eventListenerEgg1);
+                    myRef1_6.addValueEventListener(eventListenerEgg1);
+
+
+                    myRef2_1.removeEventListener(eventListenerEgg2);
+                    myRef2_2.removeEventListener(eventListenerEgg2);
+                    myRef2_3.removeEventListener(eventListenerEgg2);
+                    myRef2_4.removeEventListener(eventListenerEgg2);
+                    myRef2_5.removeEventListener(eventListenerEgg2);
+                    myRef2_6.removeEventListener(eventListenerEgg2);
 
 
                     break;
                 case 1:
                     Toast.makeText(getApplicationContext(), "ถาดที่ 2", Toast.LENGTH_LONG).show();
-                    currentPath = 2;
+
+                    myRef2_1.addValueEventListener(eventListenerEgg2);
+                    myRef2_2.addValueEventListener(eventListenerEgg2);
+                    myRef2_3.addValueEventListener(eventListenerEgg2);
+                    myRef2_4.addValueEventListener(eventListenerEgg2);
+                    myRef2_5.addValueEventListener(eventListenerEgg2);
+                    myRef2_6.addValueEventListener(eventListenerEgg2);
+
+                    myRef1_1.removeEventListener(eventListenerEgg1);
+                    myRef1_2.removeEventListener(eventListenerEgg1);
+                    myRef1_3.removeEventListener(eventListenerEgg1);
+                    myRef1_4.removeEventListener(eventListenerEgg1);
+                    myRef1_5.removeEventListener(eventListenerEgg1);
+                    myRef1_6.removeEventListener(eventListenerEgg1);
+
 
                     break;
                 default:
                     Toast.makeText(getApplicationContext(), "not define", Toast.LENGTH_LONG).show();
             }
 
-            bindRefDatabase();
+
 
         }
 
@@ -253,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    ValueEventListener eventListenerEgg = new ValueEventListener() {
+    ValueEventListener eventListenerEgg1 = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Long value = dataSnapshot.getValue(Long.class);
@@ -263,33 +300,111 @@ public class MainActivity extends AppCompatActivity {
 
             if (value >= 500 && value <= 999) {
 
-                if (dataSnapshot.getRef().toString().endsWith("egg0")) {
+                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
 
                     egg1.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
                     egg2.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
                     egg3.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
                     egg4.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
                     egg5.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
                     egg6.setVisibility(View.INVISIBLE);
                 }
             } else {
-                if (dataSnapshot.getRef().toString().endsWith("egg0")) {
+                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
 
                     egg1.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
                     egg2.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
                     egg3.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
                     egg4.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
                     egg5.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
+                    egg6.setVisibility(View.VISIBLE);
+                }
+            }
+            if (egg1.getVisibility() == View.INVISIBLE && egg2.getVisibility() == View.INVISIBLE && egg3.getVisibility() == View.INVISIBLE
+                    && egg4.getVisibility() == View.INVISIBLE && egg5.getVisibility() == View.INVISIBLE && egg6.getVisibility() == View.INVISIBLE) {
+
+                sd.start();
+
+
+                content = "ไข่หมด";
+                LongOperation lo = new LongOperation(MainActivity.this);
+                lo.execute("IOTsmartRefrigerator");
+
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_dialog_custom);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.notification);
+                dialog.setCancelable(false);
+
+                Button btOk = dialog.findViewById(R.id.ok);
+
+                btOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        buttonsd.start();
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    ValueEventListener eventListenerEgg2 = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Long value = dataSnapshot.getValue(Long.class);
+
+            Log.v("path", dataSnapshot.getRef().toString());
+
+
+            if (value >= 500 && value <= 999) {
+
+                if (dataSnapshot.getRef().toString().endsWith("egg2_0")) {
+
+                    egg1.setVisibility(View.INVISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2_1")) {
+                    egg2.setVisibility(View.INVISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2_2")) {
+                    egg3.setVisibility(View.INVISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2_3")) {
+                    egg4.setVisibility(View.INVISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2_4")) {
+                    egg5.setVisibility(View.INVISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2_5")) {
+                    egg6.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
+
+                    egg1.setVisibility(View.VISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
+                    egg2.setVisibility(View.VISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
+                    egg3.setVisibility(View.VISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
+                    egg4.setVisibility(View.VISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
+                    egg5.setVisibility(View.VISIBLE);
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
                     egg6.setVisibility(View.VISIBLE);
                 }
             }
