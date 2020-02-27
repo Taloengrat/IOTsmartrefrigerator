@@ -375,6 +375,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.v("path", dataSnapshot.getRef().toString());
 
+            ///
 
             if (value >= 500 && value <= 999) {
 
