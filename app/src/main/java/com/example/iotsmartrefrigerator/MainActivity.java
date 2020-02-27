@@ -1,30 +1,59 @@
 package com.example.iotsmartrefrigerator;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,99 +61,108 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.iotsmartrefrigerator.MyBroadcastReceiver.ACTION_SNOOZE;
 import static com.example.iotsmartrefrigerator.MyBroadcastReceiver.EXTRA_NOTIFICATION_ID;
 
 public class MainActivity extends AppCompatActivity {
-    
-    ImageView egg1, egg2 ,egg3 ,egg4 ,egg5 ,egg6, water,refresh;
-    TextView txWater,txName;
+
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 16;
+
+    ImageView egg1, egg2, egg3, egg4, egg5, egg6, water, refresh, map;
+    public final int WRITE_PERMISSON_REQUEST_CODE = 1;
+    TextView txWater, txName;
     Switch aSwitch;
+    Spinner spinner;
     boolean stateSwith = false;
     public MediaPlayer sd, buttonsd;
+
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+
+    // fastest updates interval - 5 sec
+    // location updates will be received if another app is requesting the locations
+    // than your app can handle
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+
+    private static final int REQUEST_CHECK_SETTINGS = 100;
     String content;
 
     private static final String CHANNEL_ID = "CHANNEL_ID";
     private static final String TAG = "main";
 
+    private String mLastUpdateTime;
 
-    
+    FusedLocationProviderClient mFusedLocationClient;
+    SettingsClient mSettingsClient;
+    LocationRequest mLocationRequest;
+    LocationSettingsRequest mLocationSettingsRequest;
+    LocationCallback mLocationCallback;
+    Location mCurrentLocation;
+    int currentPath = 1;
+    FirebaseDatabase database;
+
+    // boolean flag to toggle the ui
+    Boolean mRequestingLocationUpdates;
+    DatabaseReference myRef1, myRef2, myRef3, myRef4, myRef5, myRef6;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         BindingData();
 
-        createNotificationChannel();
 
+        createNotificationChannel();
 
 
 
         sd = MediaPlayer.create(getApplicationContext(), R.raw.alert);
         buttonsd = MediaPlayer.create(getApplicationContext(), R.raw.button);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg0");
-        DatabaseReference myRef2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg1");
-        DatabaseReference myRef3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg2");
-        DatabaseReference myRef4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg3");
-        DatabaseReference myRef5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg4");
-        DatabaseReference myRef6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/egg5");
-        final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/ml");
+         database = FirebaseDatabase.getInstance();
+
+        final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/ml");
 
 
+        bindRefDatabase();
+
+        waters.addValueEventListener(eventListenerwater);
 
 
-        myRef1.addValueEventListener(eventListenerEgg);
-        myRef2.addValueEventListener(eventListenerEgg);
-        myRef3.addValueEventListener(eventListenerEgg);
-        myRef4.addValueEventListener(eventListenerEgg);
-        myRef5.addValueEventListener(eventListenerEgg);
-        myRef6.addValueEventListener(eventListenerEgg);
+        aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-     waters.addValueEventListener(eventListenerwater);
-
+                buttonsd.start();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
 
 
-     aSwitch.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
+                if (stateSwith) {
+                    stateSwith = false;
+                } else {
+                    stateSwith = true;
+                }
 
-             buttonsd.start();
-             FirebaseDatabase database = FirebaseDatabase.getInstance();
-             DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control");
+                if (stateSwith) {
+                    myRef.setValue(1);
+                } else {
+                    myRef.setValue(0);
+                }
 
 
-             if (stateSwith){
-                 stateSwith = false;
-             }else{
-                 stateSwith = true;
-             }
-
-            if (stateSwith){
-                myRef.setValue(1);
-            }else{
-                myRef.setValue(0);
             }
+        });
 
 
-
-         }
-     });
-
-
-
-
-
-
-
-
-
-
-         // ผูกตัวแปรไฟล์ java กับไฟล์ xml
+        // ผูกตัวแปรไฟล์ java กับไฟล์ xml
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,22 +172,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        map.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
-//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                mapIntent.setPackage("com.google.android.apps.maps");
-//                if (mapIntent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
-//                    startActivity(mapIntent);
-//                }
-//            }
-//        });
-
 
     }
 
+    private void bindRefDatabase() {
+        myRef1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg0");
+        myRef2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg1");
+        myRef3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg2");
+        myRef4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg3");
+        myRef5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg4");
+        myRef6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path" + currentPath + "/egg5");
+
+        myRef1.addValueEventListener(eventListenerEgg);
+        myRef2.addValueEventListener(eventListenerEgg);
+        myRef3.addValueEventListener(eventListenerEgg);
+        myRef4.addValueEventListener(eventListenerEgg);
+        myRef5.addValueEventListener(eventListenerEgg);
+        myRef6.addValueEventListener(eventListenerEgg);
+    }
+
+    private void bindMenuSpinner() {
+        String[] items = new String[]{"ถาดไข่ที่ 1", "ถาดไข่ที่ 2"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter);
+    }
+
+
     private void BindingData() {
+
+
+        spinner = findViewById(R.id.spinner);
+        map = findViewById(R.id.map);
         txName = findViewById(R.id.txName);
         egg1 = findViewById(R.id.egg1);
         egg2 = findViewById(R.id.egg2);
@@ -165,6 +218,39 @@ public class MainActivity extends AppCompatActivity {
 
         txName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
+        bindMenuSpinner();
+
+        spinner.setOnItemSelectedListener(new myOnItemSelectedListener());
+
+    }
+
+    public class myOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View arg1, int pos, long arg3) {
+
+            switch (pos) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "ถาดที่ 1", Toast.LENGTH_LONG).show();
+                    currentPath = 1;
+
+
+                    break;
+                case 1:
+                    Toast.makeText(getApplicationContext(), "ถาดที่ 2", Toast.LENGTH_LONG).show();
+                    currentPath = 2;
+
+                    break;
+                default:
+                    Toast.makeText(getApplicationContext(), "not define", Toast.LENGTH_LONG).show();
+            }
+
+            bindRefDatabase();
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
     }
 
     ValueEventListener eventListenerEgg = new ValueEventListener() {
@@ -172,44 +258,43 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Long value = dataSnapshot.getValue(Long.class);
 
-            Log.v("path",dataSnapshot.getRef().toString());
+            Log.v("path", dataSnapshot.getRef().toString());
 
 
-            if (value >=500 && value <= 999){
+            if (value >= 500 && value <= 999) {
 
-                if (dataSnapshot.getRef().toString().endsWith("egg0")){
+                if (dataSnapshot.getRef().toString().endsWith("egg0")) {
 
                     egg1.setVisibility(View.INVISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg1")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1")) {
                     egg2.setVisibility(View.INVISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg2")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2")) {
                     egg3.setVisibility(View.INVISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg3")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg3")) {
                     egg4.setVisibility(View.INVISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg4")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg4")) {
                     egg5.setVisibility(View.INVISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
                     egg6.setVisibility(View.INVISIBLE);
                 }
-            }else{
-                if (dataSnapshot.getRef().toString().endsWith("egg0")){
+            } else {
+                if (dataSnapshot.getRef().toString().endsWith("egg0")) {
 
                     egg1.setVisibility(View.VISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg1")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg1")) {
                     egg2.setVisibility(View.VISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg2")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg2")) {
                     egg3.setVisibility(View.VISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg3")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg3")) {
                     egg4.setVisibility(View.VISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg4")){
+                } else if (dataSnapshot.getRef().toString().endsWith("egg4")) {
                     egg5.setVisibility(View.VISIBLE);
-                }else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("egg5")) {
                     egg6.setVisibility(View.VISIBLE);
                 }
             }
-
             if (egg1.getVisibility() == View.INVISIBLE && egg2.getVisibility() == View.INVISIBLE && egg3.getVisibility() == View.INVISIBLE
-            && egg4.getVisibility() == View.INVISIBLE && egg5.getVisibility() == View.INVISIBLE && egg6.getVisibility() == View.INVISIBLE){
+                    && egg4.getVisibility() == View.INVISIBLE && egg5.getVisibility() == View.INVISIBLE && egg6.getVisibility() == View.INVISIBLE) {
 
                 sd.start();
 
@@ -236,6 +321,8 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.show();
             }
+
+
         }
 
         @Override
@@ -250,10 +337,9 @@ public class MainActivity extends AppCompatActivity {
             Long valueWater = dataSnapshot.getValue(Long.class);
 
 
+            txWater.setText("ปริมาณน้ำ\n" + valueWater + " มิลลิลิตร");
 
-             txWater.setText("ปริมาณน้ำ\n"+valueWater+" มิลลิลิตร");
-
-            if (valueWater >= -10 && valueWater<=10){
+            if (valueWater >= -10 && valueWater <= 10) {
 
 
                 water.setImageResource(R.drawable.hidewater);
@@ -261,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                 LongOperation lo = new LongOperation(MainActivity.this);
                 lo.execute("IOTsmartRefrigerator");
 
-buttonsd.start();
+                buttonsd.start();
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_dialog_custom);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -281,7 +367,7 @@ buttonsd.start();
                 });
 
                 dialog.show();
-            }else{
+            } else {
                 water.setImageResource(R.drawable.fullwater);
             }
         }
@@ -297,22 +383,21 @@ buttonsd.start();
     protected void onStart() {
         super.onStart();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference getLight = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control");
+        DatabaseReference getLight = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
 
-        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(1);
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(1);
         getLight.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int led_control = dataSnapshot.getValue(Integer.class);
 
-                if (led_control==1){
+                if (led_control == 1) {
                     aSwitch.setChecked(true);
                     Handler pd = new Handler();
                     pd.postDelayed(close_led, 10000);
 
 
-                }else if (led_control == 0)
-                {
+                } else if (led_control == 0) {
                     aSwitch.setChecked(false);
                 }
 
@@ -339,6 +424,25 @@ buttonsd.start();
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.map:
+
+                if (PermissionUtility.askPermissionForActivity(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION, WRITE_PERMISSON_REQUEST_CODE)) {
+
+                    Uri uri = Uri.parse("https://www.google.com/maps/search/%E0%B9%80%E0%B8%8B%E0%B9%80%E0%B8%A7%E0%B9%88%E0%B8%99/@14.0376805,100.7106937,14z"); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+
+                }
+
+
+                break;
+
+
         }
     }
 
@@ -373,7 +477,7 @@ buttonsd.start();
 
         @Override
         protected void onProgressUpdate(String... values) {
-            for (String title: values) {
+            for (String title : values) {
                 sendNotification(title, notificationId.incrementAndGet());
             }
         }
@@ -417,7 +521,7 @@ buttonsd.start();
         @Override
         public void run() {
 
-            FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(0);
+            FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(0);
 
             aSwitch.setChecked(false);
 
@@ -429,8 +533,26 @@ buttonsd.start();
     protected void onDestroy() {
         super.onDestroy();
 
-        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(0);
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(0);
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

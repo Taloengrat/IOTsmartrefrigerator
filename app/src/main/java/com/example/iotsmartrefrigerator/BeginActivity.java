@@ -84,9 +84,11 @@ public class BeginActivity extends AppCompatActivity {
         signIn();
 
 
+
+
 //        updateUI(FirebaseAuth.getInstance().getCurrentUser());
     }
-
+//
 //    @Override
 //    public void onStart() {
 //        super.onStart();
@@ -155,13 +157,16 @@ public class BeginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
 
         progressDialog.dismiss();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (user!= null) {
 
 
             for (int i = 0;i<6;i++) {
-                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/" + "egg" + i).setValue(980);
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path1"+"/" + "egg" + i).setValue(980);
             }
 
+            for (int i = 0;i<6;i++) {
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/path2"+"/" + "egg" + i).setValue(980);
+            }
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/ml").setValue(600);
 
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/device/led_control").setValue(1);
