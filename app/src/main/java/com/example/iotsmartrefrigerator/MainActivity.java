@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -112,28 +113,43 @@ public class MainActivity extends AppCompatActivity {
 
         waters.addValueEventListener(eventListenerwater);
 
-        aSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 buttonsd.start();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
 
-
-                if (stateSwith) {
-                    stateSwith = false;
-                } else {
-                    stateSwith = true;
-                }
-
-                if (stateSwith) {
+                if (isChecked) {
                     myRef.setValue(1);
                 } else {
                     myRef.setValue(0);
                 }
+                // do something, the isChecked will be
+                // true if the switch is in the On position
             }
         });
+
+//        aSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                buttonsd.start();
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
+//
+//
+//
+//
+//                if (stateSwith) {
+//                    myRef.setValue(1);
+//                } else {
+//                    myRef.setValue(0);
+//                }
+//            }
+//        });
 
         // ผูกตัวแปรไฟล์ java กับไฟล์ xml
 
@@ -472,28 +488,31 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference getLight = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
 
         FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(1);
-        getLight.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int led_control = dataSnapshot.getValue(Integer.class);
 
-                if (led_control == 1) {
-                    aSwitch.setChecked(true);
-                    Handler pd = new Handler();
-                    pd.postDelayed(close_led, 15000);
-
-
-                } else if (led_control == 0) {
-                    aSwitch.setChecked(false);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        aSwitch.setChecked(true);
+        Handler pd = new Handler();
+        pd.postDelayed(close_led, 15000);
+//        getLight.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                int led_control = dataSnapshot.getValue(Integer.class);
+//
+//                if (led_control == 1) {
+//                    aSwitch.setChecked(true);
+//
+//
+//
+//                } else if (led_control == 0) {
+//                    aSwitch.setChecked(false);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
     }
 
