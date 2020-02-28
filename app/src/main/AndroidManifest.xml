@@ -35,8 +35,10 @@
         -->
 
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".BeginActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BeginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

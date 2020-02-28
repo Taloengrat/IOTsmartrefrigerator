@@ -160,12 +160,12 @@ public class BeginActivity extends AppCompatActivity {
         if (user!= null) {
 
 
-            for (int i = 0;i<6;i++) {
-                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg1_" + i).setValue(980);
+            for (int i = 1;i<=6;i++) {
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg" + i).setValue(980);
             }
 
-            for (int i = 0;i<6;i++) {
-                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg2_" + i).setValue(980);
+            for (int i = 7;i<=12;i++) {
+                FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +"/" + "egg" + i).setValue(980);
             }
             FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/ml").setValue(600);
 

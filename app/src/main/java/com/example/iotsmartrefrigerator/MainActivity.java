@@ -1,16 +1,12 @@
 package com.example.iotsmartrefrigerator;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,8 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -34,26 +28,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,11 +43,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.iotsmartrefrigerator.MyBroadcastReceiver.ACTION_SNOOZE;
@@ -76,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 16;
 
     ImageView egg1, egg2, egg3, egg4, egg5, egg6, water, refresh, map;
+
+    ImageView egg2_1, egg2_2, egg2_3, egg2_4, egg2_5, egg2_6;
     public final int WRITE_PERMISSON_REQUEST_CODE = 1;
     TextView txWater, txName;
     Switch aSwitch;
@@ -118,29 +97,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         BindingData();
 
-
-
         createNotificationChannel();
-
-
 
         sd = MediaPlayer.create(getApplicationContext(), R.raw.alert);
         buttonsd = MediaPlayer.create(getApplicationContext(), R.raw.button);
 
-         database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         bindRefDatabase1();
 
         final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/ml");
 
-
-
-
         waters.addValueEventListener(eventListenerwater);
-
 
         aSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,45 +132,33 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     myRef.setValue(0);
                 }
-
-
             }
         });
-
 
         // ผูกตัวแปรไฟล์ java กับไฟล์ xml
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 recreate();
             }
         });
-
-
     }
     private void bindRefDatabase1() {
-        myRef1_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_0");
-        myRef1_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_1");
-        myRef1_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_2");
-        myRef1_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_3");
-        myRef1_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_4");
-        myRef1_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1_5");
+        myRef1_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1");
+        myRef1_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2");
+        myRef1_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg3");
+        myRef1_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg4");
+        myRef1_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg5");
+        myRef1_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg6");
 
-        myRef2_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_0");
-        myRef2_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_1");
-        myRef2_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_2");
-        myRef2_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_3");
-        myRef2_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_4");
-        myRef2_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2_5");
-
-
-
-
-
+        myRef2_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg7");
+        myRef2_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg8");
+        myRef2_3 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg9");
+        myRef2_4 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg10");
+        myRef2_5 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg11");
+        myRef2_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg12");
     }
-
 
     private void bindMenuSpinner() {
         String[] items = new String[]{"ถาดไข่ที่ 1", "ถาดไข่ที่ 2"};
@@ -208,19 +166,25 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-
     private void BindingData() {
-
 
         spinner = findViewById(R.id.spinner);
         map = findViewById(R.id.map);
         txName = findViewById(R.id.txName);
-        egg1 = findViewById(R.id.egg1);
-        egg2 = findViewById(R.id.egg2);
-        egg3 = findViewById(R.id.egg3);
-        egg4 = findViewById(R.id.egg4);
-        egg5 = findViewById(R.id.egg5);
-        egg6 = findViewById(R.id.egg6);
+        egg1 = findViewById(R.id.egg1_1);
+        egg2 = findViewById(R.id.egg1_2);
+        egg3 = findViewById(R.id.egg1_3);
+        egg4 = findViewById(R.id.egg1_4);
+        egg5 = findViewById(R.id.egg1_5);
+        egg6 = findViewById(R.id.egg1_6);
+
+        egg2_1 = findViewById(R.id.egg2_1);
+        egg2_2 = findViewById(R.id.egg2_2);
+        egg2_3 = findViewById(R.id.egg2_3);
+        egg2_4 = findViewById(R.id.egg2_4);
+        egg2_5 = findViewById(R.id.egg2_5);
+        egg2_6 = findViewById(R.id.egg2_6);
+
         water = findViewById(R.id.tank);
         refresh = findViewById(R.id.refresh);
 
@@ -232,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
         bindMenuSpinner();
 
         spinner.setOnItemSelectedListener(new myOnItemSelectedListener());
-
     }
 
     public class myOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
@@ -250,14 +213,12 @@ public class MainActivity extends AppCompatActivity {
                     myRef1_5.addValueEventListener(eventListenerEgg1);
                     myRef1_6.addValueEventListener(eventListenerEgg1);
 
-
                     myRef2_1.removeEventListener(eventListenerEgg2);
                     myRef2_2.removeEventListener(eventListenerEgg2);
                     myRef2_3.removeEventListener(eventListenerEgg2);
                     myRef2_4.removeEventListener(eventListenerEgg2);
                     myRef2_5.removeEventListener(eventListenerEgg2);
                     myRef2_6.removeEventListener(eventListenerEgg2);
-
 
                     break;
                 case 1:
@@ -302,33 +263,33 @@ public class MainActivity extends AppCompatActivity {
 
             if (value >= 500 && value <= 999) {
 
-                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
+                if (dataSnapshot.getRef().toString().endsWith("1")) {
 
                     egg1.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("2")) {
                     egg2.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("3")) {
                     egg3.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("4")) {
                     egg4.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("5")) {
                     egg5.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("6")) {
                     egg6.setVisibility(View.INVISIBLE);
                 }
             } else {
-                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
+                if (dataSnapshot.getRef().toString().endsWith("1")) {
 
                     egg1.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("2")) {
                     egg2.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("3")) {
                     egg3.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("4")) {
                     egg4.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("5")) {
                     egg5.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("6")) {
                     egg6.setVisibility(View.VISIBLE);
                 }
             }
@@ -385,38 +346,37 @@ public class MainActivity extends AppCompatActivity {
 
             if (value >= 500 && value <= 999) {
 
-                if (dataSnapshot.getRef().toString().endsWith("egg2_0")) {
+                if (dataSnapshot.getRef().toString().endsWith("7")) {
 
                     egg1.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2_1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("8")) {
                     egg2.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2_2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("9")) {
                     egg3.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2_3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("10")) {
                     egg4.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2_4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("11")) {
                     egg5.setVisibility(View.INVISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg2_5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("12")) {
                     egg6.setVisibility(View.INVISIBLE);
                 }
             } else {
-                if (dataSnapshot.getRef().toString().endsWith("egg1_0")) {
-
+                if (dataSnapshot.getRef().toString().endsWith("7")) {
                     egg1.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_1")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("8")) {
                     egg2.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_2")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("9")) {
                     egg3.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_3")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("10")) {
                     egg4.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_4")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("11")) {
                     egg5.setVisibility(View.VISIBLE);
-                } else if (dataSnapshot.getRef().toString().endsWith("egg1_5")) {
+                } else if (dataSnapshot.getRef().toString().endsWith("12")) {
                     egg6.setVisibility(View.VISIBLE);
                 }
             }
-            if (egg1.getVisibility() == View.INVISIBLE && egg2.getVisibility() == View.INVISIBLE && egg3.getVisibility() == View.INVISIBLE
-                    && egg4.getVisibility() == View.INVISIBLE && egg5.getVisibility() == View.INVISIBLE && egg6.getVisibility() == View.INVISIBLE) {
+            if (egg2_1.getVisibility() == View.INVISIBLE && egg2_2.getVisibility() == View.INVISIBLE && egg2_3.getVisibility() == View.INVISIBLE
+                    && egg2_4.getVisibility() == View.INVISIBLE && egg2_5.getVisibility() == View.INVISIBLE && egg2_6.getVisibility() == View.INVISIBLE) {
 
                 sd.start();
 
@@ -520,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
                 if (led_control == 1) {
                     aSwitch.setChecked(true);
                     Handler pd = new Handler();
-                    pd.postDelayed(close_led, 10000);
+                    pd.postDelayed(close_led, 15000);
 
 
                 } else if (led_control == 0) {

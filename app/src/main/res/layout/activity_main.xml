@@ -138,7 +138,7 @@
             app:srcCompat="@drawable/fullwater" />
 
         <ImageView
-            android:id="@+id/egg1"
+            android:id="@+id/egg1_1"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             app:srcCompat="@drawable/egg"
@@ -149,7 +149,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/egg2"
+            android:id="@+id/egg1_2"
             android:layout_width="wrap_content"
             app:layout_constraintCircleRadius="30dp"
             android:layout_height="110dp"
@@ -160,7 +160,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/egg3"
+            android:id="@+id/egg1_3"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             app:srcCompat="@drawable/egg"
@@ -171,7 +171,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/egg4"
+            android:id="@+id/egg1_4"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             app:srcCompat="@drawable/egg"
@@ -182,7 +182,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/egg5"
+            android:id="@+id/egg1_5"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             app:srcCompat="@drawable/egg"
@@ -193,7 +193,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageView
-            android:id="@+id/egg6"
+            android:id="@+id/egg1_6"
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             app:srcCompat="@drawable/egg"
@@ -201,7 +201,82 @@
             app:layout_constraintCircle="@id/hole6"
             tools:layout_editor_absoluteX="219dp"
             tools:layout_editor_absoluteY="489dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/egg2_1"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            tools:layout_editor_absoluteX="27dp"
+            tools:layout_editor_absoluteY="182dp"
+            app:layout_constraintCircle="@id/hole1"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/egg2_2"
+            android:layout_width="wrap_content"
+            app:layout_constraintCircleRadius="30dp"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircle="@id/hole2"
+            tools:layout_editor_absoluteX="208dp"
+            tools:layout_editor_absoluteY="201dp"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/egg2_3"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole3"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="338dp"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/egg2_4"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole4"
+            tools:layout_editor_absoluteX="216dp"
+            tools:layout_editor_absoluteY="344dp"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/egg2_5"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole5"
+            tools:layout_editor_absoluteX="26dp"
+            tools:layout_editor_absoluteY="477dp"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/egg2_6"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/egg"
+            app:layout_constraintCircleRadius="30dp"
+            app:layout_constraintCircle="@id/hole6"
+            tools:layout_editor_absoluteX="219dp"
+            tools:layout_editor_absoluteY="489dp"
+            tools:ignore="MissingConstraints"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/refresh"
