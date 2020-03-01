@@ -236,6 +236,20 @@ public class MainActivity extends AppCompatActivity {
                     myRef2_5.removeEventListener(eventListenerEgg2);
                     myRef2_6.removeEventListener(eventListenerEgg2);
 
+                    egg1.setVisibility(View.VISIBLE);
+                    egg1.setVisibility(View.VISIBLE);
+                    egg1.setVisibility(View.VISIBLE);
+                    egg1.setVisibility(View.VISIBLE);
+                    egg1.setVisibility(View.VISIBLE);
+                    egg1.setVisibility(View.VISIBLE);
+
+                    egg2_1.setVisibility(View.GONE);
+                    egg2_2.setVisibility(View.GONE);
+                    egg2_3.setVisibility(View.GONE);
+                    egg2_4.setVisibility(View.GONE);
+                    egg2_5.setVisibility(View.GONE);
+                    egg2_6.setVisibility(View.GONE);
+
                     break;
                 case 1:
                     Toast.makeText(getApplicationContext(), "ถาดที่ 2", Toast.LENGTH_LONG).show();
@@ -253,6 +267,20 @@ public class MainActivity extends AppCompatActivity {
                     myRef1_4.removeEventListener(eventListenerEgg1);
                     myRef1_5.removeEventListener(eventListenerEgg1);
                     myRef1_6.removeEventListener(eventListenerEgg1);
+
+                    egg2_1.setVisibility(View.VISIBLE);
+                    egg2_2.setVisibility(View.VISIBLE);
+                    egg2_3.setVisibility(View.VISIBLE);
+                    egg2_4.setVisibility(View.VISIBLE);
+                    egg2_5.setVisibility(View.VISIBLE);
+                    egg2_6.setVisibility(View.VISIBLE);
+
+                    egg1.setVisibility(View.GONE);
+                    egg1.setVisibility(View.GONE);
+                    egg1.setVisibility(View.GONE);
+                    egg1.setVisibility(View.GONE);
+                    egg1.setVisibility(View.GONE);
+                    egg1.setVisibility(View.GONE);
 
 
                     break;
@@ -364,31 +392,31 @@ public class MainActivity extends AppCompatActivity {
 
                 if (dataSnapshot.getRef().toString().endsWith("7")) {
 
-                    egg1.setVisibility(View.INVISIBLE);
+                    egg2_1.setVisibility(View.INVISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("8")) {
-                    egg2.setVisibility(View.INVISIBLE);
+                    egg2_2.setVisibility(View.INVISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("9")) {
-                    egg3.setVisibility(View.INVISIBLE);
+                    egg2_3.setVisibility(View.INVISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("10")) {
-                    egg4.setVisibility(View.INVISIBLE);
+                    egg2_4.setVisibility(View.INVISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("11")) {
-                    egg5.setVisibility(View.INVISIBLE);
+                    egg2_5.setVisibility(View.INVISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("12")) {
-                    egg6.setVisibility(View.INVISIBLE);
+                    egg2_6.setVisibility(View.INVISIBLE);
                 }
             } else {
                 if (dataSnapshot.getRef().toString().endsWith("7")) {
-                    egg1.setVisibility(View.VISIBLE);
+                    egg2_1.setVisibility(View.VISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("8")) {
-                    egg2.setVisibility(View.VISIBLE);
+                    egg2_2.setVisibility(View.VISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("9")) {
-                    egg3.setVisibility(View.VISIBLE);
+                    egg2_3.setVisibility(View.VISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("10")) {
-                    egg4.setVisibility(View.VISIBLE);
+                    egg2_4.setVisibility(View.VISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("11")) {
-                    egg5.setVisibility(View.VISIBLE);
+                    egg2_5.setVisibility(View.VISIBLE);
                 } else if (dataSnapshot.getRef().toString().endsWith("12")) {
-                    egg6.setVisibility(View.VISIBLE);
+                    egg2_6.setVisibility(View.VISIBLE);
                 }
             }
             if (egg2_1.getVisibility() == View.INVISIBLE && egg2_2.getVisibility() == View.INVISIBLE && egg2_3.getVisibility() == View.INVISIBLE
