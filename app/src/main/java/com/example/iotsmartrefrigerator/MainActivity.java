@@ -98,24 +98,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BindingData();
+        BindingData(); // ผูกข้อมูล ไฟล์ .JAVA เข้ากับไฟล์ .XML
 
-        createNotificationChannel();
+        createNotificationChannel(); // กำหนดค่า Instance ของ notification
 
-        sd = MediaPlayer.create(getApplicationContext(), R.raw.alert);
+        sd = MediaPlayer.create(getApplicationContext(), R.raw.alert); // แสดงเสียง แจ้งเตือน
         buttonsd = MediaPlayer.create(getApplicationContext(), R.raw.button);
 
         database = FirebaseDatabase.getInstance();
 
-        bindRefDatabase1();
+        bindRefDatabase1(); // อ้างที่อยู่ของ path Firebase database
 
-        final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/ml");
+        final DatabaseReference waters = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/ml"); // อ้างที่อยู่ของ path Firebase database
 
-        waters.addValueEventListener(eventListenerwater);
+        waters.addValueEventListener(eventListenerwater); // กำหนด value firebase
 
 
 
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //// เช็ค led ว่าเปิด หรือ ปิด
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 buttonsd.start();
@@ -132,34 +132,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        aSwitch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                buttonsd.start();
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference myRef = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
-//
-//
-//
-//
-//                if (stateSwith) {
-//                    myRef.setValue(1);
-//                } else {
-//                    myRef.setValue(0);
-//                }
-//            }
-//        });
 
         // ผูกตัวแปรไฟล์ java กับไฟล์ xml
 
-        refresh.setOnClickListener(new View.OnClickListener() {
+        refresh.setOnClickListener(new View.OnClickListener() { // ปุ่ม refresh หน้า Activity
             @Override
             public void onClick(View v) {
                 recreate();
             }
         });
     }
+
     private void bindRefDatabase1() {
         myRef1_1 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg1");
         myRef1_2 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg2");
@@ -176,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         myRef2_6 = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() +  "/egg12");
     }
 
-    private void bindMenuSpinner() {
+    private void bindMenuSpinner() { // spinner สำหรับ ไข่ถาดที่ 1 ละ 2
         String[] items = new String[]{"ถาดไข่ที่ 1", "ถาดไข่ที่ 2"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         spinner.setAdapter(adapter);
@@ -214,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new myOnItemSelectedListener());
     }
 
-    public class myOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+    public class myOnItemSelectedListener implements AdapterView.OnItemSelectedListener { // event การเลือก ดูไข่ถาดที่ 1 และ ไข่ถาดที่ 2
         @Override
         public void onItemSelected(AdapterView<?> parent, View arg1, int pos, long arg3) {
 
@@ -297,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    ValueEventListener eventListenerEgg1 = new ValueEventListener() {
+    ValueEventListener eventListenerEgg1 = new ValueEventListener() { ////// สร้าง instance เพื่อดึงข้อมูลจาก database realtime ของไขา่ถาดที่ 1
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Long value = dataSnapshot.getValue(Long.class);
@@ -379,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    ValueEventListener eventListenerEgg2 = new ValueEventListener() {
+    ValueEventListener eventListenerEgg2 = new ValueEventListener() { ////// สร้าง instance เพื่อดึงข้อมูลจาก database realtime ของไขา่ถาดที่ 2
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Long value = dataSnapshot.getValue(Long.class);
@@ -461,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    ValueEventListener eventListenerwater = new ValueEventListener() {
+    ValueEventListener eventListenerwater = new ValueEventListener() { ////// สร้าง instance เพื่อดึงข้อมูลจาก database realtime ของน้ำ
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Long valueWater = dataSnapshot.getValue(Long.class);
@@ -510,41 +493,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
+    protected void onStart() { ///// ส่วนของ life circle หลางจาก oncreate
         super.onStart();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference getLight = database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control");
 
-        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(1);
+
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(1); // สั่งให้เมื่อเปิดแอปจะทำให้ led ทำงานทันทีบทฐานข้อมูล
 
         aSwitch.setChecked(true);
         Handler pd = new Handler();
-        pd.postDelayed(close_led, 15000);
-//        getLight.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                int led_control = dataSnapshot.getValue(Integer.class);
-//
-//                if (led_control == 1) {
-//                    aSwitch.setChecked(true);
-//
-//
-//
-//                } else if (led_control == 0) {
-//                    aSwitch.setChecked(false);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        pd.postDelayed(close_led, 15000); /// Deley ให้ Led ทำงาน 15 วินาที
+
 
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannel() { /// method สร้าง instane ของการแจ้งเตือน
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -560,15 +522,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick(View view) {
+    public void onClick(View view) { // method การ click
         switch (view.getId()) {
             case R.id.map:
 
-                if (PermissionUtility.askPermissionForActivity(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION, WRITE_PERMISSON_REQUEST_CODE)) {
+                if (PermissionUtility.askPermissionForActivity(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION, WRITE_PERMISSON_REQUEST_CODE)) { /// เช็ค permission ของการเข้าถึงที่อยู่ GPS
 
                     Uri uri = Uri.parse("https://www.google.com/maps/search/%E0%B9%80%E0%B8%8B%E0%B9%80%E0%B8%A7%E0%B9%88%E0%B8%99/@14.0376805,100.7106937,14z"); // missing 'http://' will cause crashed
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
+                    startActivity(intent); //// ไปยังหน้า google map
 
                 }
 
@@ -580,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class LongOperation extends AsyncTask<String, String, String> {
+    private class LongOperation extends AsyncTask<String, String, String> { //// ส่วนของการส่ง notification
 
         private static final String TAG = "longoperation";
         private Context ctx;
@@ -650,7 +612,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    Runnable close_led = new Runnable() {
+    Runnable close_led = new Runnable() { //// สร้าง instance ของการ delay การปิดการทำงานของ led
         @Override
         public void run() {
 
@@ -663,19 +625,12 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() { /// life circle เมื่อ Application ถูกทำลาย
         super.onDestroy();
 
-        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(0);
-
+        FirebaseDatabase.getInstance().getReference(FirebaseAuth.getInstance().getCurrentUser().getUid() + "/device/led_control").setValue(0); //// เมื่อ application ถูกลาย จะสั่งให้ ปิด led ทันที
 
     }
-
-
-
-
-
-
 
 
 
