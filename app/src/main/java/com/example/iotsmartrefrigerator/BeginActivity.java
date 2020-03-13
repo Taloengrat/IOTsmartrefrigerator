@@ -67,10 +67,10 @@ public class BeginActivity extends AppCompatActivity {
 
 
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); /// รับ instance ของ firebase authentication
 
 
-        user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser(); //// เช็ค user ที่ login อยู่ปัจจุบัน
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -79,9 +79,9 @@ public class BeginActivity extends AppCompatActivity {
                 .build();
         // [END config_signin]
 
-        googleSignInClient = GoogleSignIn.getClient(BeginActivity.this, gso);
+        googleSignInClient = GoogleSignIn.getClient(BeginActivity.this, gso); // รับข้อมูล ของ account google
 
-        signIn();
+        signIn(); /// เรียกใช้ method signin
 
 
 
@@ -98,7 +98,7 @@ public class BeginActivity extends AppCompatActivity {
 //    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) { ///// method รอรับการ signin
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -124,10 +124,10 @@ public class BeginActivity extends AppCompatActivity {
 //    }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) { //// signin google account
         Log.d("accoutId", "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-        progressDialog = ProgressDialog.show(BeginActivity.this, "เข้าสู่ระบบ", "กำลังเข้าสู่ระบบ...", true, false);
+        progressDialog = ProgressDialog.show(BeginActivity.this, "เข้าสู่ระบบ", "กำลังเข้าสู่ระบบ...", true, false); // แสดง progressbar เพื่อรอโหลด
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -154,7 +154,7 @@ public class BeginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user) { /// method เช็คถ้ามี user ใช้งานอยู่ จะพาไปยังหน้าใช้งาน
 
         progressDialog.dismiss();
         if (user!= null) {
@@ -183,24 +183,13 @@ public class BeginActivity extends AppCompatActivity {
     }
 
 
-    public boolean CheckInternet() {
-        boolean connected;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-            connected = true;
-        } else {
-            connected = false;
-        }
-        return connected;
-    }
 
-    private void signIn() {
+
+    private void signIn() { ///// เริ่มการใช้งานการ sign in
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-    private void AnimationFade() {
+    private void AnimationFade() { //// method สร้าง animation fade Logo เพื่อความสวยงาม
 
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(imLogo, View.ALPHA, 0f);
         anim2.setDuration(3400);
@@ -222,7 +211,7 @@ public class BeginActivity extends AppCompatActivity {
         pd.postDelayed(Delay, 3000);
     }
 
-    private void signOut() {
+    private void signOut() { ///// method logout การใช้งาน google account
         // Firebase sign out
         mAuth.signOut();
 
